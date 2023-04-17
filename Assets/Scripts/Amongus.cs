@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.Events;
 
 public class Amongus : MonoBehaviour
 {
     [SerializeField, Range(0, 1)] float moveDuration;
     [SerializeField, Range(0, 1)] float jumpHeight;
+
+    public UnityEvent<Vector3> OnJumpEnd;
 
     void Update()
     {
@@ -40,8 +43,13 @@ public class Amongus : MonoBehaviour
 
     public void Move(Vector3 direction)
     {
-        transform.DOJump(transform.position + direction, jumpHeight, 1, moveDuration);
+        transform.DOJump(transform.position + direction, jumpHeight, 1, moveDuration).onComplete = BroadCastPositionOnJumpEnd;
 
         transform.forward = direction;
+    }
+
+    private void BroadCastPositionOnJumpEnd()
+    {
+        OnJumpEnd.Invoke(transform.position);
     }
 }
