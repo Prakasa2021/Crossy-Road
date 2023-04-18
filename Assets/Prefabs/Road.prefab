@@ -45,3 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 3085143017657946247, guid: a80f3d08edac427499f5e1be29925099, type: 3}
+  suspectPrefab: {fileID: 8335641741591814152, guid: 2480ca4fc974e79418e2bed976f193ad, type: 3}
+  minSuspectSpawnInterval: 1
+  maxSuspectSpawnInterval: 3
