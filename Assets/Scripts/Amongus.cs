@@ -13,11 +13,13 @@ public class Amongus : MonoBehaviour
     [SerializeField] int backMoveLimit;
 
     public UnityEvent<Vector3> OnJumpEnd;
-    private bool isDie = false;
+    public UnityEvent<int> OnGetCoin;
+    public UnityEvent OnDie;
+    private bool isMoveable = false;
 
     void Update()
     {
-        if(isDie)
+        if(isMoveable)
             return;
 
         if(DOTween.IsTweening(transform))
@@ -56,7 +58,7 @@ public class Amongus : MonoBehaviour
         {
             targetPosition = transform.position;
         }
-
+        Debug.Log(Tree.AllPositions.Contains(targetPosition));
         transform.DOJump(targetPosition, jumpHeight, 1, moveDuration).onComplete = BroadCastPositionOnJumpEnd;
 
         transform.forward = direction;
@@ -66,7 +68,6 @@ public class Amongus : MonoBehaviour
     {
         leftMoveLimit = -horizontalSize / 2;
         rightMoveLimit = horizontalSize / 2;
-
         backMoveLimit = backLimit;
     }
 
@@ -77,12 +78,35 @@ public class Amongus : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) 
     {
-        if(isDie == true)
-            return;
+        if(other.CompareTag("Suspect"))
+        {
+            if(isMoveable == true)
+                return;
 
-        transform.DOMoveY(0.21f, 1);
-        transform.DOScaleY(0.1f, 0.2f);
+            transform.DOMoveY(0.21f, 1);
+            transform.DOScaleY(0.1f, 0.2f);
 
-        isDie = true;
+            isMoveable = true;
+            Invoke("Die", 3);
+        }
+        else if(other.CompareTag("Coin")) 
+        {
+            var coin = other.GetComponent<Coin>();
+            OnGetCoin.Invoke(coin.Value);
+            coin.Collected();
+        }
+        else if(other.CompareTag("Drone"))
+        {
+            if(this.transform != other.transform)
+            {
+                this.transform.SetParent(other.transform);
+                Invoke("Die", 3);
+            }
+        }
+    }
+
+    private void Die() 
+    {
+        OnDie.Invoke();
     }
 }

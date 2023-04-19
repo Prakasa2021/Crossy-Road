@@ -11,7 +11,6 @@ public class Tree : MonoBehaviour
     private void OnEnable()
     {
         positionSet.Add(this.transform.position);
-        Debug.Log(AllPositions);
     }
 
     private void OnDisable()
