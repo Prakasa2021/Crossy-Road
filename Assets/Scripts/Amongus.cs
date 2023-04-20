@@ -19,7 +19,7 @@ public class Amongus : MonoBehaviour
 
     void Update()
     {
-        if(isMoveable)
+        if(!isMoveable)
             return;
 
         if(DOTween.IsTweening(transform))
@@ -54,14 +54,27 @@ public class Amongus : MonoBehaviour
     {
         var targetPosition = transform.position + direction;
 
+        if(Tree.AllPositions.Contains(targetPosition))
+        {
+            Debug.Log("Ada");
+        }
+        else
+        {
+            Debug.Log("Tidak Ada");
+        }
+
         if(targetPosition.x < leftMoveLimit || targetPosition.x > rightMoveLimit || targetPosition.z < backMoveLimit || Tree.AllPositions.Contains(targetPosition))
         {
             targetPosition = transform.position;
         }
-        Debug.Log(Tree.AllPositions.Contains(targetPosition));
         transform.DOJump(targetPosition, jumpHeight, 1, moveDuration).onComplete = BroadCastPositionOnJumpEnd;
 
         transform.forward = direction;
+    }
+
+    public void SetMoveable(bool value)
+    {
+        isMoveable = value;
     }
 
     public void UpdateMoveLimit(int horizontalSize, int backLimit)
@@ -80,13 +93,13 @@ public class Amongus : MonoBehaviour
     {
         if(other.CompareTag("Suspect"))
         {
-            if(isMoveable == true)
+            if(transform.localScale.y == 0.1f)
                 return;
 
             transform.DOMoveY(0.21f, 1);
-            transform.DOScaleY(0.1f, 0.2f);
+            transform.DOScale(new Vector3(1.1f, 0.1f, 1.1f), 0.2f);
 
-            isMoveable = true;
+            isMoveable = false;
             Invoke("Die", 3);
         }
         else if(other.CompareTag("Coin")) 

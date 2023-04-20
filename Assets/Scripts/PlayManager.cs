@@ -45,6 +45,7 @@ public class PlayManager : MonoBehaviour
         OnUpdateTerrainLimit.Invoke(horizontalSize, travelDistance + backViewDistance);
     }
 
+
     private Terrain SpawnRandomTerrain(int zPos)
     {
         Terrain terrainCheck = null;

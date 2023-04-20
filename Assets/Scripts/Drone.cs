@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Drone : MonoBehaviour
 {
-    [SerializeField, Range(0, 10)] float speed;
+    [SerializeField, Range(0, 50)] float speed;
 
     private void Update() 
     {
