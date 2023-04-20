@@ -15,6 +15,8 @@ public class Amongus : MonoBehaviour
     public UnityEvent<Vector3> OnJumpEnd;
     public UnityEvent<int> OnGetCoin;
     public UnityEvent OnDie;
+    public UnityEvent OnCarCollision;
+
     private bool isMoveable = false;
 
     void Update()
@@ -100,6 +102,7 @@ public class Amongus : MonoBehaviour
             transform.DOScale(new Vector3(1.1f, 0.1f, 1.1f), 0.2f);
 
             isMoveable = false;
+            OnCarCollision.Invoke();
             Invoke("Die", 3);
         }
         else if(other.CompareTag("Coin")) 
