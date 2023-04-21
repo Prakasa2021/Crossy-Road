@@ -11,6 +11,9 @@ public class Amongus : MonoBehaviour
     [SerializeField] int leftMoveLimit;
     [SerializeField] int rightMoveLimit;
     [SerializeField] int backMoveLimit;
+    [SerializeField] AudioSource deadSound;
+    [SerializeField] AudioSource getCoin;
+    [SerializeField] AudioSource limitSound;
 
     public UnityEvent<Vector3> OnJumpEnd;
     public UnityEvent<int> OnGetCoin;
@@ -67,6 +70,7 @@ public class Amongus : MonoBehaviour
 
         if(targetPosition.x < leftMoveLimit || targetPosition.x > rightMoveLimit || targetPosition.z < backMoveLimit || Tree.AllPositions.Contains(targetPosition))
         {
+            limitSound.Play();
             targetPosition = transform.position;
         }
         transform.DOJump(targetPosition, jumpHeight, 1, moveDuration).onComplete = BroadCastPositionOnJumpEnd;
@@ -98,6 +102,7 @@ public class Amongus : MonoBehaviour
             if(transform.localScale.y == 0.1f)
                 return;
 
+            deadSound.Play();
             transform.DOMoveY(0.21f, 1);
             transform.DOScale(new Vector3(1.1f, 0.1f, 1.1f), 0.2f);
 
@@ -107,6 +112,7 @@ public class Amongus : MonoBehaviour
         }
         else if(other.CompareTag("Coin")) 
         {
+            getCoin.Play();
             var coin = other.GetComponent<Coin>();
             OnGetCoin.Invoke(coin.Value);
             coin.Collected();
