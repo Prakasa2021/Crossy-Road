@@ -24,32 +24,32 @@ public class Amongus : MonoBehaviour
 
     void Update()
     {
-        if(!isMoveable)
+        if (!isMoveable)
             return;
 
-        if(DOTween.IsTweening(transform))
+        if (DOTween.IsTweening(transform))
             return;
 
         Vector3 direction = Vector3.zero;
 
-        if(Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
             direction += Vector3.forward;
         }
-        else if(Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
         {
             direction += Vector3.back;
         }
-        else if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
             direction += Vector3.right;
         }
-        else if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
             direction += Vector3.left;
         }
 
-        if(direction == Vector3.zero)
+        if (direction == Vector3.zero)
             return;
 
         Move(direction);
@@ -59,7 +59,7 @@ public class Amongus : MonoBehaviour
     {
         var targetPosition = transform.position + direction;
 
-        if(Tree.AllPositions.Contains(targetPosition))
+        if (Tree.AllPositions.Contains(targetPosition))
         {
             Debug.Log("Ada");
         }
@@ -68,7 +68,7 @@ public class Amongus : MonoBehaviour
             Debug.Log("Tidak Ada");
         }
 
-        if(targetPosition.x < leftMoveLimit || targetPosition.x > rightMoveLimit || targetPosition.z < backMoveLimit || Tree.AllPositions.Contains(targetPosition))
+        if (targetPosition.x < leftMoveLimit || targetPosition.x > rightMoveLimit || targetPosition.z < backMoveLimit || Tree.AllPositions.Contains(targetPosition))
         {
             limitSound.Play();
             targetPosition = transform.position;
@@ -95,11 +95,11 @@ public class Amongus : MonoBehaviour
         OnJumpEnd.Invoke(transform.position);
     }
 
-    private void OnTriggerEnter(Collider other) 
+    private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Suspect"))
+        if (other.CompareTag("Suspect"))
         {
-            if(transform.localScale.y == 0.1f)
+            if (transform.localScale.y == 0.1f)
                 return;
 
             deadSound.Play();
@@ -110,16 +110,16 @@ public class Amongus : MonoBehaviour
             OnCarCollision.Invoke();
             Invoke("Die", 3);
         }
-        else if(other.CompareTag("Coin")) 
+        else if (other.CompareTag("Coin"))
         {
             getCoin.Play();
             var coin = other.GetComponent<Coin>();
             OnGetCoin.Invoke(coin.Value);
             coin.Collected();
         }
-        else if(other.CompareTag("Drone"))
+        else if (other.CompareTag("Drone"))
         {
-            if(this.transform != other.transform)
+            if (this.transform != other.transform)
             {
                 this.transform.SetParent(other.transform);
                 Invoke("Die", 3);
@@ -127,7 +127,7 @@ public class Amongus : MonoBehaviour
         }
     }
 
-    private void Die() 
+    private void Die()
     {
         OnDie.Invoke();
     }
